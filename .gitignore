@@ -1,0 +1,6 @@
+# Don't track node_modules
+node_modules
+
+# Ignore vim's swap and temporary files
+*.swp
+*~
