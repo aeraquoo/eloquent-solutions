@@ -1,4 +1,4 @@
-function isEven(number) {
+module.exports = function isEven(number) {
   if (number < 0) {
     // The even-ness of `number` is the same as for `-number`
     // we deal with negatives by converting them to positives
@@ -13,4 +13,4 @@ function isEven(number) {
     // `number` is even iff `(number - 1)` is even
     return isEven(number - 2);
   }
-}
+};

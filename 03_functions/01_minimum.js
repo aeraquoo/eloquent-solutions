@@ -1,3 +1,3 @@
-function min(a, b) {
+module.exports = function min(a, b) {
   return (a<b) ? a : b;
-}
+};
