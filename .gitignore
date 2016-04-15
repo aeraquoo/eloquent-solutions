@@ -1,5 +1,6 @@
-# Don't track node_modules
+# Don't track node_modules or debug log
 node_modules
+npm-debug.log
 
 # Ignore vim's swap and temporary files
 *.swp
