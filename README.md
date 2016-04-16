@@ -23,3 +23,18 @@ will likely expand in a similar fashion.
     │       ├── 02_recursion.test.js
     │       └── 03_bean_counting.test.js
     └── README.md
+
+Test running requires the npm modules mocha and chai.  To install:
+
+    npm install -g mocha chai
+
+from the command line.  To run:
+
+    mocha
+
+from inside a chapter directory (e.g. `03_functions`).  For this to be
+meaningful, the directory should contain a non-empty directory, `test`,
+containing tests to run.  Alternatively, to run all tests, from the top-level
+directory where this README is kept:
+
+    mocha */test
