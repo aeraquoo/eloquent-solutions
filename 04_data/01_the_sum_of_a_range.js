@@ -1,8 +1,5 @@
-// Returns an array from start (inclusive) to end (exclusive) in steps of step
+// Returns an array from start  to end (inclusive) in steps of step
 // (all integers)
-// TODO: guard against fractional start and end values: these will break the for
-// loop
-// TODO: write betted todo snippet for vim
 function range(start, end, step) {
   // Set the default `step` value (if not given)
   if (step === undefined) {
@@ -10,7 +7,6 @@ function range(start, end, step) {
   }
 
   // Guard against zero or fractional step-sizes
-  var stepZero = step === 0;
   if (step === 0 || !isInteger(step)) {
     throw new Error("Step argument must be a non-zero integer");
   }
@@ -18,14 +14,11 @@ function range(start, end, step) {
   // Initialize the array
   var arr = [];
 
-  // If the range will be empty, return empty array
-  var empty = (start === end);
-  if (empty) {
-    return [];
-  }
-
   // Check that `end` is reachable from `start` in a finite number of `step`s
-  var plausible = ((Math.sign(end - start)) == Math.sign(step));
+  var plausible = ((Math.sign(end - start)) === Math.sign(step)) || start === end;
+  if (!plausible) {
+    throw new Error("Cannot get from " + start + " to " + end + " in steps of " + step);
+  }
 
   // Build the array.
   // `i !== end`, combined with the `plausible` check above will ensure that we
@@ -33,6 +26,8 @@ function range(start, end, step) {
   for (var i = start; i !== end; i += step) {
     arr.push(i);
   }
+  // Include the endpoint
+  arr.push(i);
 
   return arr;
 }
@@ -48,7 +43,7 @@ function sum(array) {
     // Guard against non-numerical values, which could cause unexpected results,
     // e.g. `sum([1,2,3,'a',4,5,6])` should not equal '6a456'
     if (typeof currentValue !== 'number') {
-      throw new Error(currentValue + " is not a Number, cannot sum.");
+      throw new Error('"' + currentValue + '" is not a number, cannot sum.');
     }
     return cumulativeSum + currentValue;
   } , 0);
