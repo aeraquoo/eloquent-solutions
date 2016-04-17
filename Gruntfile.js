@@ -33,7 +33,7 @@ module.exports = function(grunt) {
         spawn: true,
         interrupt: true
       },
-      files:['Gruntfile.js', '*/**.js'],
+      files:['Gruntfile.js', '*/**.js', '*/test/**.js'],
       tasks: ['jshint', 'mochaTest']
     }
   });
