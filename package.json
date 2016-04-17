@@ -1,0 +1,29 @@
+{
+  "name": "my-eloquent-javascript-solutions",
+  "version": "1.0.0",
+  "description": "My solutions for the exercises set out in Eloquent Javascript",
+  "main": "index.js",
+  "dependencies": {
+    "chai": "^3.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha */test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aeraquoo/eloquent-solutions.git"
+  },
+  "keywords": [
+    "eloquent",
+    "javascript",
+    "solutions",
+    "learning"
+  ],
+  "author": "Jaye Heffernan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aeraquoo/eloquent-solutions/issues"
+  },
+  "homepage": "https://github.com/aeraquoo/eloquent-solutions#readme"
+}
