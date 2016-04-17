@@ -15,26 +15,19 @@ will likely expand in a similar fashion.
     │   ├── 02_fizzbuzz.js
     │   └── 03_chess_board.js
     ├── 03_functions
-    │   ├── 01_minimum.js
-    │   ├── 02_recursion.js
-    │   ├── 03_bean_counting.js
-    │   └── test
-    │       ├── 01_minimum.test.js
-    │       ├── 02_recursion.test.js
-    │       └── 03_bean_counting.test.js
-    └── README.md
+        ├── 01_minimum.js
+        ├── 02_recursion.js
+        ├── 03_bean_counting.js
+        └── test
+            ├── 01_minimum.test.js
+            ├── 02_recursion.test.js
+            └── 03_bean_counting.test.js
 
-Test running requires the npm modules mocha and chai.  To install:
+From the root folder, run:
+    
+    npm install
 
-    npm install -g mocha chai
+This will install the development dependencies, which are necessary for running
+the tests.  Then, to run tests:
 
-from the command line.  To run:
-
-    mocha
-
-from inside a chapter directory (e.g. `03_functions`).  For this to be
-meaningful, the directory should contain a non-empty directory, `test`,
-containing tests to run.  Alternatively, to run all tests, from the top-level
-directory where this README is kept:
-
-    mocha */test
+    npm test
