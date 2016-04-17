@@ -10,15 +10,15 @@ describe("Deep Comparison", function() {
     var other = {here: 1, object: 2};
 
     it("confirms obj equal to obj", function() {
-      assert.isOk(deepEqual(obj, obj));
+      assert.isTrue(deepEqual(obj, obj));
     });
 
     it("confirms obj equal to copy", function() {
-      assert.isOk(deepEqual(obj, copy));
+      assert.isTrue(deepEqual(obj, copy));
     });
 
     it("denies obj equal to other", function() {
-      assert.isNotOk(deepEqual(obj, other));
+      assert.isFalse(deepEqual(obj, other));
     });
 
   });
