@@ -1,8 +1,11 @@
 module.exports = function(grunt) {
 
+  var package;
+  package = grunt.file.readJSON('package.json');
+
   // Project configuration.
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
+    pkg: package,
     jshint: {
       options: {
         // Enforce === over ==
