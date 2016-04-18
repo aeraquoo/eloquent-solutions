@@ -2,7 +2,7 @@
 // defaults to 8
 var size = process.argv[2] || 8;
 
-var grid = "";
+var grid = '';
 
 // for each row
 for (var i = 0; i < size; i++) {
