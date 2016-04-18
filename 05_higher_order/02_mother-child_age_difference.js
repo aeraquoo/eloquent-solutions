@@ -1,4 +1,4 @@
-var ancestry = JSON.parse(require("./data/ancestry"));
+var ancestry = JSON.parse(require('./data/ancestry'));
 
 function average(array) {
   function plus(a, b) { return a + b; }
@@ -16,8 +16,8 @@ function ageAt(year, person) {
 
 function mcAgeDiff(people) {
   var motherAgesAtBirths = [];
-  
-  people.forEach( function(person) {
+
+  people.forEach(function(person) {
 
     var mother = byName[person.mother];
 
@@ -28,8 +28,8 @@ function mcAgeDiff(people) {
 
     motherAgesAtBirths.push(person.born - mother.born);
 
-  } );
-  
+  });
+
   return average(motherAgesAtBirths);
 }
 

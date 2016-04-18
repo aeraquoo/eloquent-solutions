@@ -8,7 +8,7 @@ function range(start, end, step) {
 
   // Guard against zero or fractional step-sizes
   if (step === 0 || !isInteger(step)) {
-    throw new Error("Step argument must be a non-zero integer");
+    throw new Error('Step argument must be a non-zero integer');
   }
 
   // Initialize the array
@@ -17,7 +17,7 @@ function range(start, end, step) {
   // Check that `end` is reachable from `start` in a finite number of `step`s
   var plausible = ((Math.sign(end - start)) === Math.sign(step)) || start === end;
   if (!plausible) {
-    throw new Error("Cannot get from " + start + " to " + end + " in steps of " + step);
+    throw new Error('Cannot get from ' + start + ' to ' + end + ' in steps of ' + step);
   }
 
   // Build the array.
@@ -37,9 +37,9 @@ function sum(array) {
   // Reduce over the array, calculating a cumulative sum at each step
   if (array.length === 0) {
     // Don't try to sum an empty array
-    throw new Error("Cannot sum an empty array.");
+    throw new Error('Cannot sum an empty array.');
   }
-  return array.reduce( function(cumulativeSum, currentValue) {
+  return array.reduce(function(cumulativeSum, currentValue) {
     // Guard against non-numerical values, which could cause unexpected results,
     // e.g. `sum([1,2,3,'a',4,5,6])` should not equal '6a456'
     if (typeof currentValue !== 'number') {

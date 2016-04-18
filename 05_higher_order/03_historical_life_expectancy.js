@@ -1,17 +1,26 @@
-var assert = require('chai').assert;
-var historicalLifeExpectancy
-  = require('../03_historical_life_expectancy');
-var average = historicalLifeExpectancy.average;
+function average(array) {
+  return array.reduce((a,b) => a+b) / array.length;
+}
 
-describe("Historical Life Expectency", function() {
+function groupBy(array, groupFunc) {
+  // An object without a prototype will only have the properties we give it
+  // This is a mapping with only the keys that we explicitly set
+  var groups = Object.create(null);
 
-  describe("average", function() {
+  for (element of array) {
+    var key = groupFunc(element);
+    if (key in groups) {
+      groups[key].push(element);
+    } else {
+      groups[key] = [element];
+    }
+  }
 
-    it("averages", function() {
-      assert.equal(average([1,2,3,4]), 2.5);
-    });
+  return groups;
 
-  });
+}
 
-
-});
+module.exports = {
+  average: average,
+  groupBy: groupBy
+};

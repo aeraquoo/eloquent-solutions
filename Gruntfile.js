@@ -47,7 +47,7 @@ module.exports = function(grunt) {
         interrupt: true
       },
       files: ['Gruntfile.js', '*/**.js', '*/test/**.js'],
-      tasks: ['mochaTest', 'jscs']
+      tasks: ['mochaTest']
     }
   });
 
@@ -59,6 +59,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-jscs');
 
   // Default task(s).
-  grunt.registerTask('default', ['mochaTest', 'jscs']);
+  grunt.registerTask('default', ['mochaTest']);
 
 };

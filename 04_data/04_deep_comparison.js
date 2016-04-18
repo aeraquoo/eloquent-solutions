@@ -18,13 +18,12 @@ module.exports = function deepEqual(a, b) {
       return false;
     }
   }
-  
+
   // To have not returned so far means the keys are equal, and their values are
   // deeply equal.  The objects are thus deeply equal
   return true;
 
 };
-
 
 function simpleListEqual(listA, listB) {
   // Sort the lists (not in place though, no side effects!)
