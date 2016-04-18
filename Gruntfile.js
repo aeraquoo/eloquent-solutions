@@ -1,19 +1,19 @@
 module.exports = function(grunt) {
 
-  var package;
-  package = grunt.file.readJSON('package.json');
+  var pack;
+  pack = grunt.file.readJSON('package.json');
 
   // Project configuration.
   grunt.initConfig({
-    pkg: package,
+    pkg: pack,
     jshint: {
       options: {
         // Enforce === over ==
         eqeqeq: true,
         // Don't allow use of variables before definition, functions ok though
-        latedef: "nofunc",
+        latedef: 'nofunc',
         // Check for unused variables and parameters
-        unused: "strict",
+        unused: 'strict',
         globals: {
           mocha: true,
           node: true
@@ -25,10 +25,20 @@ module.exports = function(grunt) {
     mochaTest: {
       test: {
         options: {
-          reporter: "spec",
+          reporter: 'spec',
           clearRequireCache: true
         },
         src: ['**/test/*.test.js']
+      }
+    },
+    jscs: {
+      src: ['Gruntfile.js', '0**/**.js'],
+      options: {
+        fix: true,
+        verbose: true,
+        esnext: true,
+        force: true,
+        preset: 'google'
       }
     },
     watch: {
@@ -36,8 +46,8 @@ module.exports = function(grunt) {
         spawn: true,
         interrupt: true
       },
-      files:['Gruntfile.js', '*/**.js', '*/test/**.js'],
-      tasks: ['jshint', 'mochaTest']
+      files: ['Gruntfile.js', '*/**.js', '*/test/**.js'],
+      tasks: ['mochaTest', 'jscs']
     }
   });
 
@@ -46,8 +56,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-jscs');
 
   // Default task(s).
-  grunt.registerTask('default', ['mochaTest']);
+  grunt.registerTask('default', ['mochaTest', 'jscs']);
 
 };

@@ -8,14 +8,14 @@ function countChar(string, countChar) {
    * to the current position.  The second argument to reduce is the initial
    * value for count, thus zero
    */
-  return string.split('').reduce( function(count, currentChar) {
+  return string.split('').reduce(function(count, currentChar) {
     if (currentChar === countChar) {
       // we've seen a `countChar`, increment the counter
       return count + 1;
     } else {
       return count;
     }
-  }, 0 );
+  }, 0);
 }
 
 exports.countBs = countBs;
