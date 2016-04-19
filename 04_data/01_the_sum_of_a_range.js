@@ -15,9 +15,11 @@ function range(start, end, step) {
   var arr = [];
 
   // Check that `end` is reachable from `start` in a finite number of `step`s
-  var plausible = ((Math.sign(end - start)) === Math.sign(step)) || start === end;
+  var plausible = ((Math.sign(end - start)) === Math.sign(step)) ||
+    start === end;
   if (!plausible) {
-    throw new Error('Cannot get from ' + start + ' to ' + end + ' in steps of ' + step);
+    throw new Error('Cannot get from ' + start + ' to ' + end +
+                    ' in steps of ' + step);
   }
 
   // Build the array.

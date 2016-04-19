@@ -1,6 +1,6 @@
 // Averages an array of numbers
 function average(array) {
-  return array.reduce((a,b) => a+b) / array.length;
+  return array.reduce((a,b) => a + b) / array.length;
 }
 
 // Returns a person's century of death

@@ -1,6 +1,8 @@
 module.exports = function deepEqual(a, b) {
   // If they are the same object, or equal primitive values, return true
-  if (a === b) return true;
+  if (a === b) {
+    return true;
+  }
 
   // Get both objects keys
   var aKeys = Object.keys(a);
@@ -31,7 +33,9 @@ function simpleListEqual(listA, listB) {
   var b = listB.slice(0).sort();
 
   // They must be the same length
-  if (a.length !== b.length) return false;
+  if (a.length !== b.length) {
+    return false;
+  }
 
   // If any of the elements are not equal, return false
   for (var i = 0; i < a.length; i++) {
