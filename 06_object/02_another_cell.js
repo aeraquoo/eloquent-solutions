@@ -51,7 +51,6 @@ function arrayPad(line, length, array) {
   return padded;
 }
 
-
 module.exports = {
   TextCell: TextCell,
   StretchCell: StretchCell,
@@ -61,14 +60,15 @@ module.exports = {
 
 // Start code copied from book
 function repeat(string, times) {
-  var result = "";
-  for (var i = 0; i < times; i++)
+  var result = '';
+  for (var i = 0; i < times; i++) {
     result += string;
+  }
   return result;
 }
 
 function TextCell(text) {
-  this.text = text.split("\n");
+  this.text = text.split('\n');
 }
 TextCell.prototype.minWidth = function() {
   return this.text.reduce(function(width, line) {
@@ -81,8 +81,8 @@ TextCell.prototype.minHeight = function() {
 TextCell.prototype.draw = function(width, height) {
   var result = [];
   for (var i = 0; i < height; i++) {
-    var line = this.text[i] || "";
-    result.push(line + repeat(" ", width - line.length));
+    var line = this.text[i] || '';
+    result.push(line + repeat(' ', width - line.length));
   }
   return result;
 };

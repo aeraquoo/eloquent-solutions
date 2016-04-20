@@ -23,7 +23,7 @@ Vector.prototype.minus = function(vector) {
   return new Vector(this.x - vector.x, this.y - vector.y);
 };
 
-Object.defineProperty(Vector.prototype, "length", {
+Object.defineProperty(Vector.prototype, 'length', {
   get: function() {
     // When getting length of vector, return Euclidean Distance from the origin
     return euclideanDistance(0, 0, this.x, this.y);
