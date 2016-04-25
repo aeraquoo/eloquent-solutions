@@ -1,6 +1,6 @@
 var assert = require('chai').assert;
 
-var module = require('../03_Sequence_interface');
+var module = require('../03_sequence_interface');
 
 var logFive         = module.logFive;
 var ArraySeq        = module.ArraySeq;
