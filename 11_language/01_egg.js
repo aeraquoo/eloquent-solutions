@@ -13,12 +13,6 @@ function parseExpression(program) {
   return parseApply(expr, program.slice(match[0].length));
 }
 
-function skipSpace(string) {
-  var first = string.search(/\S/);
-  if (first == -1) return "";
-  return string.slice(first);
-}
-
 function parseApply(expr, program) {
   program = skipSpace(program);
   if (program[0] != "(")
@@ -127,6 +121,67 @@ topEnv["print"] = function(value) {
   return value;
 };
 
+/* my code starts */
+
+// array stuff
+topEnv["array"] = function() {
+  return Array.prototype.slice.call(arguments, 0);
+}
+
+topEnv["length"] = function(array) {
+  return array.length;
+}
+
+topEnv["element"] = function(array, n) {
+  return array[n];
+}
+
+// comment stuff
+function skipSpace(string) {
+  var first = string.search(/\S/);
+  // The last important character is the one before a #
+  var last = string.search(/\#/);
+  if (first == -1)
+    // all whitespace, return blank line
+    return "";
+  if (last == -1)
+    // no comments, return the whole line from first
+    return string.slice(first);
+  // return from first non-whitespace up until first comment char
+  return string.slice(first, last);
+}
+
+//specialForms["define"] = function(args, env) {
+  //if (args.length != 2 || args[0].type != "word")
+    //throw new SyntaxError("Bad use of define");
+  //var value = evaluate(args[1], env);
+  //env[args[0].name] = value;
+  //return value;
+//};
+specialForms["set"] = function(args, env) {
+  // TODO: fix this function
+	if (args.length != 2 || args[0].type != "word")
+		throw new SyntaxError("Bad use of set");
+
+	var value = evaluate(args[1], env);
+  console.log(value);
+  console.log(env);
+	while (value === null) {
+    env = Object.getPrototypeOf(env);
+    console.log("env: "+env);
+
+    if (env === null) {
+      throw new ReferenceError(args[0].name + ": variable not found");
+    }
+
+    value = evaluate(args[1], env);
+  }
+
+	env[args[0].name] = value;
+	return value;
+};
+/* my code ends */
+
 function run() {
   var env = Object.create(topEnv);
   var program = Array.prototype.slice
@@ -154,3 +209,38 @@ specialForms["fun"] = function(args, env) {
     return evaluate(body, localEnv);
   };
 };
+
+// Basic Tests
+run("do(define(plusOne, fun(a, +(a, 1))),",
+    "   print(plusOne(10)))");
+
+run("do(define(pow, fun(base, exp,",
+    "     if(==(exp, 0),",
+    "        1,",
+    "        *(base, pow(base, -(exp, 1)))))),",
+    "   print(pow(2, 10)))");
+
+// Test arrays
+run("do(define(sum, fun(array,",
+    "     do(define(i, 0),",
+    "        define(sum, 0),",
+    "        while(<(i, length(array)),",
+    "          do(define(sum, +(sum, element(array, i))),",
+    "             define(i, +(i, 1)))),",
+    "        sum))),",
+    "   print(sum(array(1, 2, 3))))");
+
+// Test comments
+console.log(parse("a # one\n   # two\n()"));
+// → {type: "apply",
+// //    operator: {type: "word", name: "a"},
+// //    args: []}
+
+// Test set
+run("do(define(x, 4),",
+    "   define(setx, fun(val, set(x, val))),",
+    "   setx(50),",
+    "   print(x))");
+// → 50
+run("set(quux, true)");
+// → Some kind of ReferenceError
