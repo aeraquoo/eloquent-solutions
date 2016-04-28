@@ -163,21 +163,22 @@ specialForms["set"] = function(args, env) {
 	if (args.length != 2 || args[0].type != "word")
 		throw new SyntaxError("Bad use of set");
 
-	var value = evaluate(args[1], env);
-  console.log(value);
-  console.log(env);
-	while (value === null) {
-    env = Object.getPrototypeOf(env);
-    console.log("env: "+env);
+  var name = args[0].name;
 
-    if (env === null) {
-      throw new ReferenceError(args[0].name + ": variable not found");
+  var found = false;
+  while (!(env === null)) {
+    if (Object.prototype.hasOwnProperty.call(env, name)) {
+      var value = evaluate(args[1], env);
+      env[name] = value;
+      found = true;
     }
-
-    value = evaluate(args[1], env);
+    env = Object.getPrototypeOf(env);
   }
 
-	env[args[0].name] = value;
+  if (!found) {
+    throw new ReferenceError(name + " not found");
+  }
+
 	return value;
 };
 /* my code ends */
