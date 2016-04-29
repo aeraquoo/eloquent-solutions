@@ -151,35 +151,31 @@ function skipSpace(string) {
   return string.slice(first, last);
 }
 
-//specialForms["define"] = function(args, env) {
-  //if (args.length != 2 || args[0].type != "word")
-    //throw new SyntaxError("Bad use of define");
-  //var value = evaluate(args[1], env);
-  //env[args[0].name] = value;
-  //return value;
-//};
+// fixing scope stuff
 specialForms["set"] = function(args, env) {
-  // TODO: fix this function
-	if (args.length != 2 || args[0].type != "word")
-		throw new SyntaxError("Bad use of set");
+  if (args.length != 2 || args[0].type != "word")
+    throw new SyntaxError("Bad use of set");
 
+  // initialize scope to env
+  var scope = env;
   var name = args[0].name;
+  // evalueate value
+  var value = evaluate(args[1], env);
 
-  var found = false;
-  while (!(env === null)) {
-    if (Object.prototype.hasOwnProperty.call(env, name)) {
-      var value = evaluate(args[1], env);
-      env[name] = value;
-      found = true;
+  // we will check for `name` in `scope` until `scope` is null, i.e
+  // until we have reached the global scope and still not found `name`
+  while (scope !== null) {
+    // check for `name` in _this_ scope only
+    if (Object.prototype.hasOwnProperty.call(scope, name)) {
+      // found it! set it and return
+      return scope[name] = value;
     }
-    env = Object.getPrototypeOf(env);
+    // traverse up to the next level of scope
+    scope = Object.getPrototypeOf(scope);
   }
 
-  if (!found) {
-    throw new ReferenceError(name + " not found");
-  }
-
-	return value;
+  // `name` was never found
+  throw new ReferenceError("Variable not found: " + name);
 };
 /* my code ends */
 
@@ -211,16 +207,6 @@ specialForms["fun"] = function(args, env) {
   };
 };
 
-// Basic Tests
-run("do(define(plusOne, fun(a, +(a, 1))),",
-    "   print(plusOne(10)))");
-
-run("do(define(pow, fun(base, exp,",
-    "     if(==(exp, 0),",
-    "        1,",
-    "        *(base, pow(base, -(exp, 1)))))),",
-    "   print(pow(2, 10)))");
-
 // Test arrays
 run("do(define(sum, fun(array,",
     "     do(define(i, 0),",
@@ -230,6 +216,7 @@ run("do(define(sum, fun(array,",
     "             define(i, +(i, 1)))),",
     "        sum))),",
     "   print(sum(array(1, 2, 3))))");
+// → 6
 
 // Test comments
 console.log(parse("a # one\n   # two\n()"));
