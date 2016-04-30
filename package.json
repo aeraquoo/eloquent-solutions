@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "My solutions for the exercises set out in Eloquent Javascript",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "node-jsdom": "^3.1.5"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "grunt": "^1.0.1",
