@@ -1,0 +1,10 @@
+<p>This input does not take Q's, W's or X's.</p>
+<input type="text">
+<script>
+  var field = document.querySelector("input");
+  field.addEventListener("keypress", function(event) {
+    if (/[qwxQWX]/.test(String.fromCharCode(event.keyCode))) {
+      event.preventDefault();
+    }
+  });
+</script>
