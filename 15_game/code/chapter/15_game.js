@@ -343,11 +343,22 @@ function runLevel(level, Display, andThen) {
   });
 }
 
-function runGame(plans, Display) {
+function runGame(plans, Display, lives) {
+  if (lives === undefined) {
+    lives = 3;
+  }
+  livesLeft = lives;
   function startLevel(n) {
     runLevel(new Level(plans[n]), Display, function(status) {
-      if (status == "lost")
-        startLevel(n);
+      if (status == "lost") {
+        if (livesLeft === 0) {
+          livesLeft = lives;
+          startLevel(0);
+        } else {
+          livesLeft -= 1;
+          startLevel(n);
+        }
+      }
       else if (n < plans.length - 1)
         startLevel(n + 1);
       else
