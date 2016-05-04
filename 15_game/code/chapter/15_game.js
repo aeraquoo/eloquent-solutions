@@ -320,11 +320,23 @@ var esc = trackKeys(escCodes);
 function runLevel(level, Display, andThen) {
   var display = new Display(document.body, level);
   var paused = false;
+  // The last time we recorded a pause button press
+  var lastPressedAt = (new Date()).getTime();
+  // Current will be the current time
+  var current;
   runAnimation(function(step) {
-    if (esc.escape) {
+    // get the current time (in milliseconds)
+    current = (new Date()).getTime();
+    // Check that it has been at least 500 milliseconds since the last time we
+    // toggled pause state.  This is used as debounce protection, to protect
+    // against the situation where the button being "held" for 100ms could
+    // rapidly toggle pause back and forth
+    if (esc.escape && (current - lastPressedAt) > 500) {
       paused = !paused;
+      lastPressedAt = current;
     }
     if (paused) {
+      // We are paused, the time step for animation is zero
       step = 0;
     }
     level.animate(step, arrows);
@@ -340,16 +352,21 @@ function runLevel(level, Display, andThen) {
 
 function runGame(plans, Display, lives) {
   if (lives === undefined) {
+    // default to 3 lives
     lives = 3;
   }
+  // track how many lives remain
   livesLeft = lives;
   function startLevel(n) {
     runLevel(new Level(plans[n]), Display, function(status) {
       if (status == "lost") {
+        // we lost
         if (livesLeft === 0) {
+          // no lives, reset lives remaining counter and the game
           livesLeft = lives;
           startLevel(0);
         } else {
+          // lose a life, restart the current level
           livesLeft -= 1;
           startLevel(n);
         }
