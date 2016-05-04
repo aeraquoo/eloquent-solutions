@@ -283,6 +283,7 @@ Level.prototype.playerTouched = function(type, actor) {
 };
 
 var arrowCodes = {37: "left", 38: "up", 39: "right"};
+var escCodes = {27: "escape"};
 
 function trackKeys(codes) {
   var pressed = Object.create(null);
@@ -314,10 +315,18 @@ function runAnimation(frameFunc) {
 }
 
 var arrows = trackKeys(arrowCodes);
+var esc = trackKeys(escCodes);
 
 function runLevel(level, Display, andThen) {
   var display = new Display(document.body, level);
+  var paused = false;
   runAnimation(function(step) {
+    if (esc.escape) {
+      paused = !paused;
+    }
+    if (paused) {
+      step = 0;
+    }
     level.animate(step, arrows);
     display.drawFrame(step);
     if (level.isFinished()) {
