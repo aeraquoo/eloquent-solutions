@@ -44,10 +44,9 @@ function drawPieChart(ctx, data) {
     var right = (textAngle < 0.5 * Math.PI);
     if (!right) {
       // If we are on the left of the chart, move our label left so that it ends
-      // close to the chart border, rather than startng there and overlapping
+      // close to the chart border, rather than starting there and overlapping
       // the chart
-      var width = ctx.measureText(result.name).width;
-      textX -= width;
+      ctx.textAlign = "end";
     }
 
     // Draw the label
