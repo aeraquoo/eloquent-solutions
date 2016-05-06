@@ -17,7 +17,8 @@ ctypes.forEach( function(type) {
 });
 
 /**
- * Factory function for HTTP response handler functions
+ * Higher order function for creating HTTP response handler functions with some
+ * context information
  *
  * @param {string} type - the content-type used in the Accept header of the request (for
  * logging purposes)
