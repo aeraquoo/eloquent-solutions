@@ -1,3 +1,5 @@
+var R = require("ramda");
+
 function elt(name, attributes) {
   var node = document.createElement(name);
   if (attributes) {
@@ -95,6 +97,55 @@ tools.Rectangle = function(event, cx, onEnd) {
     });
 };
 
+function Point(x, y) {
+    return {
+        'x': x,
+        'y': y
+    };
+}
+
+var neighbours = function(point) {
+    return [
+        Point(point.x + 1, point.y + 1),
+        Point(point.x + 1, point.y - 1),
+        Point(point.x - 1, point.y + 1),
+        Point(point.x + 1, point.y - 1)
+    ];
+};
+
+tools.FloodFill = function(event, cx) {
+    var pos = relativePos(event, cx.canvas);
+    var startColor;
+    try {
+        startColor = pixelAt(cx, pos.x, pos.y);
+    } catch (e) {
+        return;
+    }
+    var endColor = cx.fillStyle.split(/\,|\(|\)/).slice(1);
+
+    var isColor = R.curry(function(color, point) {
+        try {
+            return R.equals(color, pixelAt(cx, point.x, point.y));
+        } catch (e) {
+            console.log(color);
+            console.log(point);
+            return false;
+        }
+    });
+
+    function color(point) {
+        cx.fillRect(point.x, point.y, 1, 1);
+    }
+
+    var floodFill = R.curry(function(startColour, endColor, points) {
+        points.map(color);
+        var toColour = R.flatten(points.map(neighbours)).filter(isColor(startColor));
+        floodFill(startColor, endColor, toColour);
+    });
+
+    floodFill(startColor, endColor, [pos]);
+};
+
 tools.Erase = function(event, cx) {
   cx.globalCompositeOperation = "destination-out";
   tools.Line(event, cx, function() {
@@ -121,8 +172,8 @@ tools.ColorPicker = function pickColor(event, cx) {
     }
     console.log(pix);
 
-    var rgb = pix.slice(0, 3);
-    var colourString = "rgb(" + rgb.toString() + ")";
+    var rgba = pix.slice(0, 4);
+    var colourString = "rgba(" + rgba.toString() + ")";
 
     document.querySelector("input[type=color]").value = colourString;
     cx.fillStyle   = colourString;
@@ -245,3 +296,5 @@ function randomPointInRadius(radius) {
       return {x: x * radius, y: y * radius};
   }
 }
+
+createPaint(document.body);
