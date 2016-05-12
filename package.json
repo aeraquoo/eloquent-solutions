@@ -4,6 +4,7 @@
   "description": "My solutions for the exercises set out in Eloquent Javascript",
   "main": "index.js",
   "dependencies": {
+    "mkdirp": "^0.5.1",
     "node-jsdom": "^3.1.5"
   },
   "devDependencies": {
