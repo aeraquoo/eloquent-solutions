@@ -1,4 +1,5 @@
 var R = require("ramda");
+var Color = require("color");
 
 function elt(name, attributes) {
   var node = document.createElement(name);
@@ -20,7 +21,9 @@ var controls = Object.create(null);
 
 function createPaint(parent) {
   var canvas = elt("canvas", {width: 500, height: 300});
+  console.log(canvas);
   var cx = canvas.getContext("2d");
+  console.log(cx);
   var toolbar = elt("div", {class: "toolbar"});
   for (var name in controls)
     toolbar.appendChild(controls[name](cx));
@@ -104,46 +107,73 @@ function Point(x, y) {
     };
 }
 
+// This is mine
 var neighbours = function(point) {
     return [
-        Point(point.x + 1, point.y + 1),
-        Point(point.x + 1, point.y - 1),
-        Point(point.x - 1, point.y + 1),
-        Point(point.x + 1, point.y - 1)
+        Point(point.x, point.y + 1),
+        Point(point.x, point.y - 1),
+        Point(point.x - 1, point.y),
+        Point(point.x + 1, point.y)
     ];
 };
 
+// This is mine
 tools.FloodFill = function(event, cx) {
-    var pos = relativePos(event, cx.canvas);
-    var startColor;
-    try {
-        startColor = pixelAt(cx, pos.x, pos.y);
-    } catch (e) {
-        return;
-    }
-    var endColor = cx.fillStyle.split(/\,|\(|\)/).slice(1);
+    // Starting position - the pixel that was clicked
+    var startPos = relativePos(event, cx.canvas);
+    // Information about the images pixels (1d array)
+    var pixelData = cx.getImageData(0, 0, cx.canvas.width, cx.canvas.height);
+    // Store whether or not we have visited/touched a point
+    var touched = new Array(pixelData.height * pixelData.width);
+    // Points waiting to be visited/touched/coloured
+    var waiting = [startPos];
 
+    // Gets the colour of a point
+    function getColor(point) {
+        var offset = (point.x + pixelData.width * point.y) * 4;
+        return pixelData.data.slice(offset, offset + 4);
+    }
+
+    // Checks if a point is of a specified colour
     var isColor = R.curry(function(color, point) {
-        try {
-            return R.equals(color, pixelAt(cx, point.x, point.y));
-        } catch (e) {
-            console.log(color);
-            console.log(point);
-            return false;
-        }
+        return R.equals(color, getColor(point));
     });
 
-    function color(point) {
-        cx.fillRect(point.x, point.y, 1, 1);
+    // The colour of our starting position
+    var startColor = getColor(startPos);
+    // Checks if a point is the same colour as our original point
+    var isStartColor = isColor(startColor);
+
+    // Record the fact that a point has been touched
+    function touch(point) {
+        var offset = point.x + pixelData.width * point.y;
+        touched[offset] = true;
     }
 
-    var floodFill = R.curry(function(startColour, endColor, points) {
-        points.map(color);
-        var toColour = R.flatten(points.map(neighbours)).filter(isColor(startColor));
-        floodFill(startColor, endColor, toColour);
-    });
+    // Check if we still need to touch a point
+    function notTouched(point) {
+        var offset = point.x + pixelData.width * point.y;
+        return !touched[offset];
+    }
 
-    floodFill(startColor, endColor, [pos]);
+    // Checks if a point is within the bounds of the canvas
+    function inBounds(point) {
+        return (0 <= point.x && point.x < pixelData.width &&
+            0 <= point.y && point.y < pixelData.height);
+    }
+
+    while(waiting.length) {
+        // While points remain waiting, get another one
+        curr = waiting.pop();
+        // If it is our starting colour...
+        if(isStartColor(curr)) {
+            // Color it
+            cx.fillRect(curr.x, curr.y, 1, 1);
+            touch(curr);
+            // Add any suitable neighbours to the wait-list
+            neighbours(curr).filter(notTouched).filter(inBounds).reverse().forEach([].push.bind(waiting));
+        }
+    }
 };
 
 tools.Erase = function(event, cx) {
@@ -156,7 +186,7 @@ tools.Erase = function(event, cx) {
 // Returns an array-like [R, G, B, transparency]
 function pixelAt(cx, x, y) {
     var data = cx.getImageData(x, y, 1, 1);
-    return data.data;
+    return Array.prototype.slice.call(data.data, 0, 3);
 }
 
 // This function is mine
