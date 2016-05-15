@@ -1,0 +1,3 @@
+This could be implemented by moving all of the templating logic to the server.
+The server can loop over the talks and build up the html before sending it to
+the client.
